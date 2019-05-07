@@ -1,6 +1,7 @@
 package it.polito.tdp.anagrammi.controller;
 
 import java.net.URL;
+
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -12,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+
 
 public class AnagrammiController {
 
@@ -38,7 +40,7 @@ public class AnagrammiController {
 
     AnagrammiModel m;
 
-    Set<String> anagrammi;
+   
     
     public void setModel(AnagrammiModel model) {
     	this.m=model;
@@ -48,14 +50,14 @@ public class AnagrammiController {
     	txtCorretti.clear();
     	txtErrati.clear();
     	
-    	String parola=txtParola.getText();
+    	String parola=txtParola.getText().trim().toLowerCase().replaceAll("[.,\\/#!$%\\^&\\*;:{}=\\-_'~()\\[\\]\"]", "");;
+    	Set <String> anagrammi=this.m.calcolaAnagrammi(parola);
     	
-    	anagrammi=this.m.calcolaAnagrammi(parola);
     	for(String s: anagrammi) {
-    	if(m.isCorrect(parola))
-    	txtCorretti.appendText(s + "\n");
+    	if(this.m.isCorrect(s))
+    		txtCorretti.appendText(s + "\n");
     	else
-    	txtErrati.appendText(s + "\n");
+    		txtErrati.appendText(s + "\n");
     	}
     	
     }
