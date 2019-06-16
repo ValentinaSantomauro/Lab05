@@ -1,53 +1,63 @@
 package it.polito.tdp.anagrammi.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import it.polito.tdp.anagrammi.DAO.AnagrammaDAO;
 
 public class AnagrammiModel {
 	
-	AnagrammaDAO anagrammaDAO = new AnagrammaDAO();
+	List<String> ottima;
+	AnagrammaDAO dao = new AnagrammaDAO();
+	public List<String> elencoAnagrammi(String parola){
+		this.ottima=new ArrayList <String> ();
+		//PARZIALE: stringa ancora vuota che ogni volta aumenterà di una lettera
+		String parziale ="";
 	
-	public Set<String> calcolaAnagrammi(String parola){
-		Set<String> anagrammi = new HashSet<String>();
-		String parziale = "";
-		calcola(parziale,parola,0,anagrammi);
-		return anagrammi;
+		this.cercaAnagramma(0,parziale,parola,ottima);
+		return ottima;
+	}
+	public boolean isCorrect(String parola) {
+		return dao.isCorrect(parola);
 	}
 	
-	public boolean isCorrect(String anagramma){
-		return anagrammaDAO.isCorrect(anagramma);
-	}
-	
-	private void calcola(String parziale,String parola, int passo, Set<String> anagrammi){
+	private void cercaAnagramma(int livello,String parziale,String parola,List<String> ottima) {
+		//-->CONDIZIONE DI TERMINAZIONE
 		
-		if(passo == parola.length()){
-			anagrammi.add(parziale);
-			return;
+		if(livello==parola.length()) {
+			ottima.add(parziale);
 		}
 		
-		for(int i = 0; i< parola.length(); i++){
-			if(charCounter(parziale, parola.charAt(i))< charCounter(parola, parola.charAt(i))){
-				parziale += parola.charAt(i);
-				calcola(parziale, parola, passo + 1,anagrammi);
-				parziale = parziale.substring(0,parziale.length()-1);
-			}
-		}
+		//RICORSIONE -> per tutte le lettere di parola, le devo scambiare
+		for(int i=0;i<parola.length();i++) {
+			/*
+			 * per ogni parola devo controllare quante lettere uguali ci sono --> le conto con charCounter
+			 * se ho già inserito il numero tot di lettere uguali -> ho finito
+			 * altrimenti il num di lettere uguali di parziale sarà minore rispetto a quello della parola data
+			 * aggiungo la lettera in questione a parziale
+			 * avvio la ricorsione
+			 */
+			if(this.charCounter(parziale, parola.charAt(i))< this.charCounter(parola, parola.charAt(i)));
+			parziale+=parola.charAt(i);
+			cercaAnagramma(livello+1,parziale,parola,ottima);
+			parziale=parziale.substring(0, parziale.length()-1);
 			
+		
+		}
+		
+		
+		
 	}
 	
-
-	private static int charCounter(String string, char c){
-		int count = 0;
-	    for (int i=0; i < string.length(); i++)
-	    {
-	        if (string.charAt(i) == c)
-	        {
-	             count++;
-	        }
-	    }
-	    return count;
+	private int charCounter(String string, char c) {
+		int count=0;
+		for(int i=0;i<string.length();i++) {
+			if(string.charAt(i)==c)
+				count++;
+		}
+		return count;
 	}
 	
 	

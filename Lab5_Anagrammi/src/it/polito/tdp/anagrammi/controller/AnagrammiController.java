@@ -39,24 +39,12 @@ public class AnagrammiController {
     @FXML
     void doCalcola(ActionEvent event) {
    
-    	txtCorretti.clear();
-    	txtErrati.clear();
     	
-    	Set<String> anagrammi = this.model.calcolaAnagrammi(txtParola.getText());
-    	
-    	for(String anagramma : anagrammi){
-    		if(this.model.isCorrect(anagramma))
-    			txtCorretti.appendText(anagramma + "\n");
-    		else
-    			txtErrati.appendText(anagramma + "\n");
-    	}
     }
 
     @FXML
     void doReset(ActionEvent event) {
-    	txtCorretti.clear();
-    	txtErrati.clear();
-    	txtParola.clear();
+    	
     }
     
     /**
